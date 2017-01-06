@@ -161,7 +161,7 @@ namespace DiffIconPic.Lib
                             List<rgbColor> list_A = GetRGBfromPixels_2(kvp.Value);
                             List<rgbColor> list_B = GetRGBfromPixels_2(kvp2.Value);
                             string result = GetSimilarityofListrgb(list_A, list_B).ToString();
-                            if (result != "100")
+                            if (result!="100")
                             {
                                 //backup 旧数据
                                 list_diff_icon.Add(kvp2.Value);

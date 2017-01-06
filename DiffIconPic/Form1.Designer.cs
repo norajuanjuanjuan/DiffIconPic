@@ -37,7 +37,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txt_garminIconFolder = new System.Windows.Forms.TextBox();
             this.btn_replace = new System.Windows.Forms.Button();
-            this.btn_insertNew = new System.Windows.Forms.Button();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.tabControl_image = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -47,6 +46,10 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.imageList_new = new System.Windows.Forms.ImageList(this.components);
             this.btn_showChange = new System.Windows.Forms.Button();
+            this.lblTotalNew = new System.Windows.Forms.Label();
+            this.lblNewCount = new System.Windows.Forms.Label();
+            this.lblDiffCount = new System.Windows.Forms.Label();
+            this.lblToltalDiff = new System.Windows.Forms.Label();
             this.panel_top.SuspendLayout();
             this.panel_bottom.SuspendLayout();
             this.tabControl_image.SuspendLayout();
@@ -72,9 +75,9 @@
             // 
             // btnNav2Sel
             // 
-            this.btnNav2Sel.Location = new System.Drawing.Point(699, 51);
+            this.btnNav2Sel.Location = new System.Drawing.Point(699, 47);
             this.btnNav2Sel.Name = "btnNav2Sel";
-            this.btnNav2Sel.Size = new System.Drawing.Size(75, 23);
+            this.btnNav2Sel.Size = new System.Drawing.Size(75, 32);
             this.btnNav2Sel.TabIndex = 5;
             this.btnNav2Sel.Text = "浏览...";
             this.btnNav2Sel.UseVisualStyleBackColor = true;
@@ -82,9 +85,9 @@
             // 
             // btn_garminSel
             // 
-            this.btn_garminSel.Location = new System.Drawing.Point(699, 12);
+            this.btn_garminSel.Location = new System.Drawing.Point(699, 8);
             this.btn_garminSel.Name = "btn_garminSel";
-            this.btn_garminSel.Size = new System.Drawing.Size(75, 23);
+            this.btn_garminSel.Size = new System.Drawing.Size(75, 33);
             this.btn_garminSel.TabIndex = 4;
             this.btn_garminSel.Text = "浏览...";
             this.btn_garminSel.UseVisualStyleBackColor = true;
@@ -133,17 +136,6 @@
             this.btn_replace.UseVisualStyleBackColor = true;
             this.btn_replace.Click += new System.EventHandler(this.btn_replace_Click);
             // 
-            // btn_insertNew
-            // 
-            this.btn_insertNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_insertNew.Location = new System.Drawing.Point(621, 427);
-            this.btn_insertNew.Name = "btn_insertNew";
-            this.btn_insertNew.Size = new System.Drawing.Size(149, 29);
-            this.btn_insertNew.TabIndex = 6;
-            this.btn_insertNew.Text = "Insert NewIcon";
-            this.btn_insertNew.UseVisualStyleBackColor = true;
-            this.btn_insertNew.Click += new System.EventHandler(this.btn_insertNew_Click);
-            // 
             // panel_bottom
             // 
             this.panel_bottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -168,8 +160,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblNewCount);
+            this.tabPage1.Controls.Add(this.lblTotalNew);
             this.tabPage1.Controls.Add(this.btn_show_changedIcon);
-            this.tabPage1.Controls.Add(this.btn_insertNew);
             this.tabPage1.Controls.Add(this.listView1);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
@@ -182,7 +175,7 @@
             // btn_show_changedIcon
             // 
             this.btn_show_changedIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_show_changedIcon.Location = new System.Drawing.Point(437, 427);
+            this.btn_show_changedIcon.Location = new System.Drawing.Point(621, 428);
             this.btn_show_changedIcon.Name = "btn_show_changedIcon";
             this.btn_show_changedIcon.Size = new System.Drawing.Size(149, 29);
             this.btn_show_changedIcon.TabIndex = 8;
@@ -203,6 +196,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.lblDiffCount);
+            this.tabPage2.Controls.Add(this.lblToltalDiff);
             this.tabPage2.Controls.Add(this.btn_showChange);
             this.tabPage2.Controls.Add(this.btn_replace);
             this.tabPage2.Controls.Add(this.dataGridView1);
@@ -249,6 +244,48 @@
             this.btn_showChange.UseVisualStyleBackColor = true;
             this.btn_showChange.Click += new System.EventHandler(this.btn_showChange_Click);
             // 
+            // lblTotalNew
+            // 
+            this.lblTotalNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblTotalNew.AutoSize = true;
+            this.lblTotalNew.Location = new System.Drawing.Point(13, 434);
+            this.lblTotalNew.Name = "lblTotalNew";
+            this.lblTotalNew.Size = new System.Drawing.Size(103, 15);
+            this.lblTotalNew.TabIndex = 9;
+            this.lblTotalNew.Text = "Total Count:";
+            // 
+            // lblNewCount
+            // 
+            this.lblNewCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblNewCount.AutoSize = true;
+            this.lblNewCount.ForeColor = System.Drawing.Color.Red;
+            this.lblNewCount.Location = new System.Drawing.Point(122, 435);
+            this.lblNewCount.Name = "lblNewCount";
+            this.lblNewCount.Size = new System.Drawing.Size(55, 15);
+            this.lblNewCount.TabIndex = 10;
+            this.lblNewCount.Text = "label4";
+            // 
+            // lblDiffCount
+            // 
+            this.lblDiffCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDiffCount.AutoSize = true;
+            this.lblDiffCount.ForeColor = System.Drawing.Color.Red;
+            this.lblDiffCount.Location = new System.Drawing.Point(119, 441);
+            this.lblDiffCount.Name = "lblDiffCount";
+            this.lblDiffCount.Size = new System.Drawing.Size(55, 15);
+            this.lblDiffCount.TabIndex = 12;
+            this.lblDiffCount.Text = "label4";
+            // 
+            // lblToltalDiff
+            // 
+            this.lblToltalDiff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblToltalDiff.AutoSize = true;
+            this.lblToltalDiff.Location = new System.Drawing.Point(10, 440);
+            this.lblToltalDiff.Name = "lblToltalDiff";
+            this.lblToltalDiff.Size = new System.Drawing.Size(103, 15);
+            this.lblToltalDiff.TabIndex = 11;
+            this.lblToltalDiff.Text = "Total Count:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -263,7 +300,9 @@
             this.panel_bottom.ResumeLayout(false);
             this.tabControl_image.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -273,7 +312,6 @@
 
         private System.Windows.Forms.Panel panel_top;
         private System.Windows.Forms.Button btn_replace;
-        private System.Windows.Forms.Button btn_insertNew;
         private System.Windows.Forms.Button btnNav2Sel;
         private System.Windows.Forms.Button btn_garminSel;
         private System.Windows.Forms.Label label2;
@@ -289,6 +327,10 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btn_show_changedIcon;
         private System.Windows.Forms.Button btn_showChange;
+        private System.Windows.Forms.Label lblNewCount;
+        private System.Windows.Forms.Label lblTotalNew;
+        private System.Windows.Forms.Label lblDiffCount;
+        private System.Windows.Forms.Label lblToltalDiff;
     }
 }
 

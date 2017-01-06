@@ -16,6 +16,12 @@ namespace DiffIconPic
         public Form1()
         {
             InitializeComponent();
+            lblNewCount.Text = "";
+            lblDiffCount.Text = "";
+            lblToltalDiff.Visible = false;
+            lblTotalNew.Visible = false;
+            txt_garminIconFolder.Text = Constant.GarminIconFolder;
+            txt_garminIconFolder.Select(0,0);
         }
 
         private void btn_garminSel_Click(object sender, EventArgs e)
@@ -68,35 +74,14 @@ namespace DiffIconPic
                     this.listView1.Items.Add(lvi);
                 }
                 this.listView1.EndUpdate();
+                lblTotalNew.Visible = true;
+                lblNewCount.Text = list_new_icon_path.Count.ToString();
             }
         }
 
         private void btn_insertNew_Click(object sender, EventArgs e)
         {
-            Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
-            Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
-           
-            if (Constant.GarminIconFolder != "" && Constant.Nav2IconFolder != "")
-            {
-                WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "new");
-                string newFolderPath = Constant.GarminNouseIconFolder + "\\new";
-                foreach(ListViewItem lvi in listView1.Items)
-                {
-                    string filePath = Constant.Nav2IconFolder + "\\" + lvi.Text;
-                    WinformHelper.CopyFileToFolder(filePath, newFolderPath); //backup new icon
-                    WinformHelper.CopyFileToFolder(filePath,Constant.GarminIconFolder);
-                    PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
-                    PictureHelper.ResizeIcon32(filePath,64,Constant.GarminIconFolder);
-                }
-                Dictionary<string, string> dic_garmin_path = PictureHelper.GetAllPicPath(Constant.GarminIconFolder);
-                Dictionary<string, string> dic_nav2_path = PictureHelper.GetAllPicPath(Constant.Nav2IconFolder);
-                List<string> list_new_icon_path = PictureHelper.GetNewIconPath(dic_garmin_path, dic_nav2_path);
-                if (list_new_icon_path.Count == 0)
-                {
-                    MessageBox.Show("Done!");
-                    listView1.Items.Clear();
-                }
-            }
+            
         }
 
         private void btn_showChange_Click(object sender, EventArgs e)
@@ -106,30 +91,11 @@ namespace DiffIconPic
 
         private void btn_replace_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.Rows.Count != 0)
-            {
-                //back up old ones
-                WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "old");
-                string oldFolderPath = Constant.GarminNouseIconFolder + "\\old";
+            int nwCount=InsertNewIcon();
+            int reCount = ReplaceOldIcon();
 
-                DataTable dt = (DataTable)dataGridView1.DataSource;
-                foreach(DataRow dr in dt.Rows)
-                {
-                    if (Convert.ToBoolean(dr["IsSelected"]) == true)
-                    {
-                        string oldFile=Constant.GarminIconFolder + "\\" + dr["BrandId"] + "_day_";
-                        string filePath=txt_nav2IconFolder.Text+ "\\" + dr["BrandId"] + "_day_2.png";
-                        if (File.Exists(oldFile + "1.png")) WinformHelper.CopyFileToFolder(oldFile + "1.png", oldFolderPath);
-                        WinformHelper.CopyFileToFolder(oldFile + "2.png", oldFolderPath);
-                        if (File.Exists(oldFile + "3.png")) WinformHelper.CopyFileToFolder(oldFile + "3.png", oldFolderPath);
-                        WinformHelper.CopyFileToFolder(filePath,Constant.GarminIconFolder);
-                        PictureHelper.ResizeIcon32(filePath,24,Constant.GarminIconFolder);
-                        PictureHelper.ResizeIcon32(filePath,64,Constant.GarminIconFolder);
-                    }
-                }
-                MessageBox.Show("Done!");
-                RefreshDataGridView();
-            }
+            MessageBox.Show("Done!\n新增Icon：" + nwCount + "笔!\n替换旧Icon:" + reCount + "笔！");
+            
         }
 
         #region Methods
@@ -154,6 +120,8 @@ namespace DiffIconPic
                 DataTable dt = GetChangedIconInfo(list_changed_icon_path);
                 dataGridView1.DataSource = dt;
                 SetDataGridView();
+                lblToltalDiff.Visible = true;
+                lblDiffCount.Text = dt.Rows.Count.ToString();
             }
         }
         
@@ -181,7 +149,61 @@ namespace DiffIconPic
            }
            return dt;
        }
+       int InsertNewIcon()
+       {
+           //insert new icon
+           Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
+           Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
+           List<string> list_new_icon_path = new List<string>();
 
+           if (Constant.GarminIconFolder != "" && Constant.Nav2IconFolder != "")
+           {
+               Dictionary<string, string> dic_garmin_path = PictureHelper.GetAllPicPath(Constant.GarminIconFolder);
+               Dictionary<string, string> dic_nav2_path = PictureHelper.GetAllPicPath(Constant.Nav2IconFolder);
+               list_new_icon_path = PictureHelper.GetNewIconPath(dic_garmin_path, dic_nav2_path);
+
+               WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "new");
+               string newFolderPath = Constant.GarminNouseIconFolder + "\\new";
+               foreach (string filePath in list_new_icon_path)
+               {
+                   WinformHelper.CopyFileToFolder(filePath, newFolderPath); //backup new icon
+                   WinformHelper.CopyFileToFolder(filePath, Constant.GarminIconFolder);
+                   PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
+                   PictureHelper.ResizeIcon32(filePath, 64, Constant.GarminIconFolder);
+               }
+           }
+           return list_new_icon_path.Count;
+       }
+       int ReplaceOldIcon()
+       {
+           int handle = 0;
+           if (dataGridView1.Rows.Count != 0)
+           {
+               //back up old ones
+               WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "old");
+               string oldFolderPath = Constant.GarminNouseIconFolder + "\\old";
+
+               DataTable dt = (DataTable)dataGridView1.DataSource;
+
+               foreach (DataRow dr in dt.Rows)
+               {
+                   if (Convert.ToBoolean(dr["IsSelected"]) == true)
+                   {
+                       string oldFile = Constant.GarminIconFolder + "\\" + dr["BrandId"] + "_day_";
+                       string filePath = txt_nav2IconFolder.Text + "\\" + dr["BrandId"] + "_day_2.png";
+                       if (File.Exists(oldFile + "1.png")) WinformHelper.CopyFileToFolder(oldFile + "1.png", oldFolderPath);
+                       WinformHelper.CopyFileToFolder(oldFile + "2.png", oldFolderPath);
+                       if (File.Exists(oldFile + "3.png")) WinformHelper.CopyFileToFolder(oldFile + "3.png", oldFolderPath);
+                       WinformHelper.CopyFileToFolder(filePath, Constant.GarminIconFolder);
+                       PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
+                       PictureHelper.ResizeIcon32(filePath, 64, Constant.GarminIconFolder);
+                       handle++;
+                   }
+               }
+               RefreshDataGridView();
+           }
+           return handle;
+       }
         #endregion
     }
 }

@@ -5,3 +5,4 @@ D:\Source_Code\DiffIconPic\DiffIconPic\bin\Release\DiffIconPic.exe
 D:\Source_Code\DiffIconPic\DiffIconPic\bin\Release\DiffIconPic.pdb
 D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.exe
 D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.pdb
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.csprojResolveAssemblyReference.cache

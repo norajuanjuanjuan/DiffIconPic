@@ -8,7 +8,7 @@ namespace DiffIconPic.Lib
 {
     class Constant
     {
-        public static string GarminIconFolder = "";
+        public static string GarminIconFolder = @"\\10.127.0.20\Work\00000004_Tools\CreateTYP\type_nav2\icon_release";
         public static string GarminNouseIconFolder = "";
         public static string Nav2IconFolder = "";
 
