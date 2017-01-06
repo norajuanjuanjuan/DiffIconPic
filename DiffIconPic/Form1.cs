@@ -1,0 +1,187 @@
+﻿using DiffIconPic.Lib;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace DiffIconPic
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btn_garminSel_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                if(fbd.SelectedPath!="")
+                txt_garminIconFolder.Text = fbd.SelectedPath;
+                Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
+            }
+        }
+
+        private void btnNav2Sel_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                if (fbd.SelectedPath != "")
+                    txt_nav2IconFolder.Text = fbd.SelectedPath;
+                Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
+            }
+        }
+
+
+        private void btn_show_newIcon_Click(object sender, EventArgs e)
+        {
+            Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
+            Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
+            if (Constant.GarminIconFolder!= "" && Constant.Nav2IconFolder != "")
+            {
+                imageList_new.Images.Clear();
+                imageList_new.ImageSize = new System.Drawing.Size(32, 32);
+                listView1.Items.Clear();
+                this.listView1.LargeImageList = imageList_new;
+                this.listView1.View = View.LargeIcon;
+
+                Dictionary<string, string> dic_garmin_path = PictureHelper.GetAllPicPath(Constant.GarminIconFolder);
+                Dictionary<string, string> dic_nav2_path = PictureHelper.GetAllPicPath(Constant.Nav2IconFolder);
+                List<string> list_new_icon_path = PictureHelper.GetNewIconPath(dic_garmin_path, dic_nav2_path);
+
+                this.listView1.BeginUpdate();
+                for (int i = 0; i < list_new_icon_path.Count; i++)
+                {
+                    Image img = (Image)PictureHelper.GetBitmap(list_new_icon_path[i]);
+                    imageList_new.Images.Add(img);
+                    ListViewItem lvi = new ListViewItem();
+                    lvi.ImageIndex = i;
+                    lvi.Text = Path.GetFileName(list_new_icon_path[i]);
+                    this.listView1.Items.Add(lvi);
+                }
+                this.listView1.EndUpdate();
+            }
+        }
+
+        private void btn_insertNew_Click(object sender, EventArgs e)
+        {
+            Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
+            Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
+           
+            if (Constant.GarminIconFolder != "" && Constant.Nav2IconFolder != "")
+            {
+                WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "new");
+                string newFolderPath = Constant.GarminNouseIconFolder + "\\new";
+                foreach(ListViewItem lvi in listView1.Items)
+                {
+                    string filePath = Constant.Nav2IconFolder + "\\" + lvi.Text;
+                    WinformHelper.CopyFileToFolder(filePath, newFolderPath); //backup new icon
+                    WinformHelper.CopyFileToFolder(filePath,Constant.GarminIconFolder);
+                    PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
+                    PictureHelper.ResizeIcon32(filePath,64,Constant.GarminIconFolder);
+                }
+                Dictionary<string, string> dic_garmin_path = PictureHelper.GetAllPicPath(Constant.GarminIconFolder);
+                Dictionary<string, string> dic_nav2_path = PictureHelper.GetAllPicPath(Constant.Nav2IconFolder);
+                List<string> list_new_icon_path = PictureHelper.GetNewIconPath(dic_garmin_path, dic_nav2_path);
+                if (list_new_icon_path.Count == 0)
+                {
+                    MessageBox.Show("Done!");
+                    listView1.Items.Clear();
+                }
+            }
+        }
+
+        private void btn_showChange_Click(object sender, EventArgs e)
+        {
+            RefreshDataGridView();
+        }
+
+        private void btn_replace_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.Rows.Count != 0)
+            {
+                //back up old ones
+                WinformHelper.CreateDirectory(Constant.GarminNouseIconFolder, "old");
+                string oldFolderPath = Constant.GarminNouseIconFolder + "\\old";
+
+                DataTable dt = (DataTable)dataGridView1.DataSource;
+                foreach(DataRow dr in dt.Rows)
+                {
+                    if (Convert.ToBoolean(dr["IsSelected"]) == true)
+                    {
+                        string oldFile=Constant.GarminIconFolder + "\\" + dr["BrandId"] + "_day_";
+                        string filePath=txt_nav2IconFolder.Text+ "\\" + dr["BrandId"] + "_day_2.png";
+                        if (File.Exists(oldFile + "1.png")) WinformHelper.CopyFileToFolder(oldFile + "1.png", oldFolderPath);
+                        WinformHelper.CopyFileToFolder(oldFile + "2.png", oldFolderPath);
+                        if (File.Exists(oldFile + "3.png")) WinformHelper.CopyFileToFolder(oldFile + "3.png", oldFolderPath);
+                        WinformHelper.CopyFileToFolder(filePath,Constant.GarminIconFolder);
+                        PictureHelper.ResizeIcon32(filePath,24,Constant.GarminIconFolder);
+                        PictureHelper.ResizeIcon32(filePath,64,Constant.GarminIconFolder);
+                    }
+                }
+                MessageBox.Show("Done!");
+                RefreshDataGridView();
+            }
+        }
+
+        #region Methods
+        void SetDataGridView()
+        {
+            dataGridView1.Columns["IsSelected"].HeaderText = "  ";
+            WinformHelper.SetEditingForDataGridView(1,dataGridView1);
+        }
+
+        void RefreshDataGridView()
+        {
+            Constant.setConstantGarminPathValue(txt_garminIconFolder.Text);
+            Constant.setConstantNav2PathValue(txt_nav2IconFolder.Text);
+            if (Constant.GarminIconFolder != "" && Constant.Nav2IconFolder != "")
+            {
+                Constant.GarminIconFolder = txt_garminIconFolder.Text;
+                dataGridView1.DataSource = null;
+                Dictionary<string, string> dic_garmin_path = PictureHelper.GetAllPicPath(Constant.GarminIconFolder);
+                Dictionary<string, string> dic_nav2_path = PictureHelper.GetAllPicPath(Constant.Nav2IconFolder);
+                List<string> list_changed_icon_path = PictureHelper.GetDiffIconPath(dic_garmin_path, dic_nav2_path);
+
+                DataTable dt = GetChangedIconInfo(list_changed_icon_path);
+                dataGridView1.DataSource = dt;
+                SetDataGridView();
+            }
+        }
+        
+       DataTable GetChangedIconInfo(List<string> list_path)
+       {
+           DataTable dt = new DataTable();
+           dt.Columns.Add("BrandId",typeof(string));
+           dt.Columns.Add("OldIcon", typeof(byte[]));
+           dt.Columns.Add("NewIcon", typeof(byte[]));
+           //add a new column for checkbox
+           DataColumn dc = new DataColumn("IsSelected", System.Type.GetType("System.Boolean"));
+           dc.DefaultValue = true;
+           dt.Columns.Add(dc);
+           dt.Columns["IsSelected"].SetOrdinal(0);
+           foreach (string path in list_path)
+           {
+               string bmp_fileName = Path.GetFileNameWithoutExtension(path);
+               string brandId = bmp_fileName.Split('_')[0];
+               string oldIconPath = txt_garminIconFolder.Text + "\\" + brandId + "_day_2.png";
+               DataRow dr = dt.NewRow();
+               dr["BrandId"] = brandId;
+               dr["OldIcon"] =PictureHelper.GetByteImage(PictureHelper.GetBitmap(oldIconPath));
+               dr["NewIcon"] =PictureHelper.GetByteImage( PictureHelper.GetBitmap(path));
+               dt.Rows.Add(dr);
+           }
+           return dt;
+       }
+
+        #endregion
+    }
+}

@@ -1,0 +1,8 @@
+D:\Source_Code\DiffIconPic\DiffIconPic\bin\Debug\DiffIconPic.exe
+D:\Source_Code\DiffIconPic\DiffIconPic\bin\Debug\DiffIconPic.pdb
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.csprojResolveAssemblyReference.cache
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.Form1.resources
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.Properties.Resources.resources
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.csproj.GenerateResource.Cache
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.exe
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Debug\DiffIconPic.pdb

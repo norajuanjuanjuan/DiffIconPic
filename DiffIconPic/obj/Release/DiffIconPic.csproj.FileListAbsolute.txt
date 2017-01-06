@@ -1,0 +1,7 @@
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.Form1.resources
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.Properties.Resources.resources
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.csproj.GenerateResource.Cache
+D:\Source_Code\DiffIconPic\DiffIconPic\bin\Release\DiffIconPic.exe
+D:\Source_Code\DiffIconPic\DiffIconPic\bin\Release\DiffIconPic.pdb
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.exe
+D:\Source_Code\DiffIconPic\DiffIconPic\obj\Release\DiffIconPic.pdb
