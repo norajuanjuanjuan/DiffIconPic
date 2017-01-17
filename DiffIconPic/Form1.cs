@@ -133,7 +133,7 @@ namespace DiffIconPic
            dt.Columns.Add("NewIcon", typeof(byte[]));
            //add a new column for checkbox
            DataColumn dc = new DataColumn("IsSelected", System.Type.GetType("System.Boolean"));
-           dc.DefaultValue = true;
+           dc.DefaultValue = false;
            dt.Columns.Add(dc);
            dt.Columns["IsSelected"].SetOrdinal(0);
            foreach (string path in list_path)
