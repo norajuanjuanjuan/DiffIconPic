@@ -169,7 +169,7 @@ namespace DiffIconPic
                    WinformHelper.CopyFileToFolder(filePath, newFolderPath); //backup new icon
                    WinformHelper.CopyFileToFolder(filePath, Constant.GarminIconFolder);
                    PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
-                   PictureHelper.ResizeIcon32(filePath, 64, Constant.GarminIconFolder);
+                   PictureHelper.ResizeIcon32(filePath, 48, Constant.GarminIconFolder);
                }
            }
            return list_new_icon_path.Count;
@@ -196,7 +196,7 @@ namespace DiffIconPic
                        if (File.Exists(oldFile + "3.png")) WinformHelper.CopyFileToFolder(oldFile + "3.png", oldFolderPath);
                        WinformHelper.CopyFileToFolder(filePath, Constant.GarminIconFolder);
                        PictureHelper.ResizeIcon32(filePath, 24, Constant.GarminIconFolder);
-                       PictureHelper.ResizeIcon32(filePath, 64, Constant.GarminIconFolder);
+                       PictureHelper.ResizeIcon32(filePath, 48, Constant.GarminIconFolder);
                        handle++;
                    }
                }

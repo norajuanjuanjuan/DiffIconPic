@@ -113,7 +113,7 @@ namespace DiffIconPic.Lib
             using (Graphics g = Graphics.FromImage(result))
                 g.DrawImage(bmp, 0, 0, size, size);
             string nmbr ="1";
-            if (size == 64) nmbr = "3";
+            if (size == 48) nmbr = "3";
             if (size == 24) nmbr = "1";
             result.Save(targetFolder+@"\"+brandId+"_day_"+nmbr+".png");
         }
